@@ -4,4 +4,9 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="BarcodeLib" Version="2.2.5" />
+    <PackageReference Include="EntityFrameworkCore.Triggers" Version="1.2.2" />
+  </ItemGroup>
+
 </Project>
