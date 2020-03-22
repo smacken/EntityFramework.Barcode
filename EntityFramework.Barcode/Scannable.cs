@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Drawing;
+using System.IO;
 using BarcodeLib;
+using EntityFrameworkCore.Triggers;
 
 namespace EntityFramework.Barcode
 {
     public abstract class Scannable
     {
-        public virtual Barcode Barcode { get; set; }
+        public virtual BarcodeLib.Barcode Barcode { get; set; }
         public virtual string BarcodeImage { get; set; }
 
         static Scannable() {
@@ -16,7 +19,7 @@ namespace EntityFramework.Barcode
             };
         }
 
-        public string ToBase64(Image image)
+        public static string ToBase64(Image image)
         {
             using (var m = new MemoryStream())
             {

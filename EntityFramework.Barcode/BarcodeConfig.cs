@@ -5,7 +5,7 @@ namespace EntityFramework.Barcode
 {
     public class BarcodeConfig
     {
-        public BarcodeLib.Type BarcodeType { get; set; }
+        public BarcodeLib.TYPE BarcodeType { get; set; }
         public bool IncludeLabel { get; set; }
     }
 }
