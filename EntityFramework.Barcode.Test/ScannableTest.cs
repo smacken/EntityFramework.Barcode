@@ -12,7 +12,19 @@ namespace EntityFramework.Barcode.Test
         }
 
         [Fact]
+        public void Scannable_CanInsertWithBarcodeStringSet()
+        {
+
+        }
+
+        [Fact]
         public void Scannable_CanReadBarcodeFromSaved()
+        {
+
+        }
+
+        [Fact]
+        public void Scannable_CanUpdateWithSetBarcode()
         {
 
         }
