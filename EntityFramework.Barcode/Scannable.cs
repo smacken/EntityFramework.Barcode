@@ -5,6 +5,8 @@ using System.Drawing.Imaging;
 using System.IO;
 using BarcodeLib;
 using EntityFrameworkCore.Triggers;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace EntityFramework.Barcode
 {
@@ -27,28 +29,40 @@ namespace EntityFramework.Barcode
         static Scannable() {
             Triggers<Scannable>.Inserting += entry => 
             {
+                BarcodeConfig config = GetConfig(entry.Service);
                 if (string.IsNullOrEmpty(entry.Entity.BarcodeEntry)) entry.Entity.BarcodeEntry = Generator.Generate();
+                entry.Entity.Barcode.Alignment = config.Alignment;
                 entry.Entity.BarcodeImage = ToBase64(entry.Entity.Barcode.Encode(
-                    BarcodeLib.TYPE.UPCA, 
+                    config.BarcodeType, 
                     entry.Entity.Barcode.RawData, 
                     Color.Black, 
                     Color.White, 
-                    290, 120)
+                    entry.Entity.Barcode.Width, 
+                    entry.Entity.Barcode.Height)
                 );
             };
             Triggers<Scannable>.Updating += entry => 
             {
                 if (!string.IsNullOrEmpty(entry.Entity.BarcodeEntry))
                 {
+                    BarcodeConfig config = GetConfig(entry.Service);
                     entry.Entity.BarcodeImage = ToBase64(entry.Entity.Barcode.Encode(
-                        BarcodeLib.TYPE.UPCA, 
+                        config.BarcodeType, 
                         entry.Entity.Barcode.RawData, 
                         Color.Black, 
                         Color.White, 
-                        290, 120)
+                        entry.Entity.Barcode.Width, 
+                        entry.Entity.Barcode.Height)
                     );
                 }
             };
+        }
+
+        private static BarcodeConfig GetConfig(IServiceProvider provider)
+        {
+            var options = provider.GetService<IOptions<BarcodeConfig>>();
+            BarcodeConfig config = options?.Value ?? new BarcodeConfig();
+            return config;
         }
 
         public static string ToBase64(Image image)
