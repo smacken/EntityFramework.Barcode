@@ -60,6 +60,7 @@ namespace EntityFramework.Barcode
 
         private static BarcodeConfig GetConfig(IServiceProvider provider)
         {
+            if (provider == null) return new BarcodeConfig();
             var options = provider.GetService<IOptions<BarcodeConfig>>();
             BarcodeConfig config = options?.Value ?? new BarcodeConfig();
             return config;
