@@ -22,18 +22,21 @@ namespace EntityFramework.Barcode.Test
         {
             using (var context = _serviceProvider.GetService<Context>())
             {
-                var product = new Product{Name="Pencil", BarcodeEntry=Generator.Generate(11)};
+                var product = new Product
+                {
+                    Name = "Pencil", 
+                    BarcodeEntry = Generator.Generate(11)
+                };
                 context.Products.Add(product);
                 context.SaveChanges();
             }
 
             using (var context = _serviceProvider.GetService<Context>())
             {
-                context.Products.Count().Should().Be(1);
-                context.Products.Single().Name.Should().Be("Pencil");
+                context.Products.Count(p => p.Name == "Pencil").Should().Be(1);
             }
         }
-        
+
         [Fact]
         public void Scannable_CanInsertWithBarcode()
         {
@@ -43,14 +46,18 @@ namespace EntityFramework.Barcode.Test
 
             using (var context = _serviceProvider.GetService<Context>())
             {
-                var product = new Product{Name="Pencil", BarcodeEntry=Generator.Generate(11)};
+                var product = new Product
+                {
+                    Name = "Crayon", 
+                    BarcodeEntry = Generator.Generate(11)
+                };
                 context.Products.Add(product);
                 context.SaveChanges();
             }
 
             using (var context = _serviceProvider.GetService<Context>())
             {
-                var prod = context.Products.Single(p => p.Name == "Pencil");
+                var prod = context.Products.Single(p => p.Name == "Crayon");
                 prod.BarcodeImage.Should().NotBeNullOrEmpty();
                 prod.Barcode.Should().BeOfType(typeof(BarcodeLib.Barcode));
             }

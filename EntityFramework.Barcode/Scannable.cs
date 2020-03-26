@@ -46,6 +46,7 @@ namespace EntityFramework.Barcode
                 if (!string.IsNullOrEmpty(entry.Entity.BarcodeEntry))
                 {
                     BarcodeConfig config = GetConfig(entry.Service);
+                    entry.Entity.Barcode.Alignment = config.Alignment;
                     entry.Entity.BarcodeImage = ToBase64(entry.Entity.Barcode.Encode(
                         config.BarcodeType, 
                         entry.Entity.Barcode.RawData, 
